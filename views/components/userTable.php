@@ -1,5 +1,6 @@
 <table class="table table-bordered">
         <tr>
+            <th>#</th>
             <th>Пользователь(логин)</th>
             <th>Имя</th>
             <th>возраст</th>
@@ -7,14 +8,15 @@
             <th>Фотография</th>
             <th>Действия</th>
         </tr>
+    <?php foreach ($users as $num => $user) :?>
         <tr>
-            <td>vasya99</td>
-            <td>Вася</td>
-            <td>14</td>
-            <td>Эксперт в спорах в интернете</td>
-            <td><img src="http://lorempixel.com/people/200/200/" alt=""></td>
-            <td>
-                <a href="">Удалить пользователя</a>
-            </td>
+            <td><?php echo $num ?></td>
+            <td><?php echo $user['login'] ?></td>
+            <td><?php echo $user['name'] ?></td>
+            <td><?php echo $user['age'] ?></td>
+            <td><?php echo $user['description'] ?></td>
+            <td><img src="public/uploads/<?php echo $user['photo'] ?>" class="table-photo"></td>
+            <td><a href="list.php?action=delete&id=<?php echo $user['id'] ?>">Удалить пользователя</a></td>
         </tr>
+    <?php endforeach;?>
     </table>

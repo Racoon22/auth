@@ -7,7 +7,7 @@ if (!isset($_COOKIE['login'])) {
 
 if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
     $deleteUser = $DBH->prepare(
-        "Delete  FROM users WHERE id = :id;
+        "UPDATE users SET photo = ''  WHERE id = :id;
 ");
     $deleteUser->execute([
         'id' => $_GET['id']
@@ -19,4 +19,4 @@ $findUser = $DBH->query(
 ");
 $users = $findUser->fetchAll();
 
-require('views/list.php');
+require('views/filelist.php');

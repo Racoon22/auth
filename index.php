@@ -1,6 +1,6 @@
 <?php
-require('db.php');
-require("functions.php");
+require('core/db.php');
+require("core/functions.php");
 
 session_start();
 if (isset($_POST['login']) && isset($_POST['password']) && !$_POST['token'] = session_id()) {

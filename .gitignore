@@ -4,7 +4,7 @@
 
 # IntelliJ project files
 .idea
-db.php
+core/db.php
 public/uploads/*
 *.iml
 out

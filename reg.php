@@ -1,6 +1,6 @@
 <?php
-require('db.php');
-require("functions.php");
+require('core/db.php');
+require("core/functions.php");
 
 if (isset($_COOKIE['login'])) {
     header('location: list.php');

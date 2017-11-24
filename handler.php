@@ -1,6 +1,6 @@
 <?php
-require('db.php');
-require("functions.php");
+require('core/db.php');
+require("core/functions.php");
 
 if (isset($_FILES['photos'])) {
     $file = $_FILES['photos'];
@@ -13,13 +13,13 @@ if (isset($_FILES['photos'])) {
             "SELECT id FROM users ORDER BY id DESC LIMIT 1;
 ");
         $userID = $user->fetch();
-        $newName = $userID['id'].'-' . time() . '.' .$ext;
+        $newName = $userID['id'].'.' .$ext;
         $path = "public/uploads/$newName";
         if(!move_uploaded_file($file['tmp_name'], $path)){
             $data['error']['photo'] = 'Неудалось загрузить файл';
         } else {
             session_start();
-            $_SESSION['photo'] = $path;
+            $_SESSION['photo'] = $newName;
         }
     }
     if (isset($data['error'])) {

@@ -60,7 +60,7 @@ $('#reg_btn').on("click", function (e) {
                 dataType: "json"
             }).done(function (data) {
                 if (data.status === true) {
-                    window.location.href = "list.html";
+                    window.location.href = "list.php";
                 }
                 console.log(data);
             });
