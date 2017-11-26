@@ -15,24 +15,26 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
         ];
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     } else {
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $password = password_verify($_POST['password'], PASSWORD_DEFAULT);
         $user = $DBH->prepare(
-            "SELECT login, password  FROM users Where password = :password AND login = :login;
+            "SELECT login, password  FROM users Where login = :login;
 ");
         $user->execute([
-            'password' => $password,
             'login' => $_POST['login']
         ]);
-        $userID = $user->fetch();
-        if (!empty($userID)) {
-            setcookie('login', $_POST['login'], time() + (86400 * 30), "/");
-            header('location: list.php');
+        $user = $user->fetch();
+        if (empty($user || !password_verify($_POST['password'], $user['password']))) {
+            $error['wrong'] = 'Логин или пароль неправильный';
+            $response = ['status' => false,
+                'errors' => $password
+            ];
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        } else {
+            $response = ['status' => true,
+            ];
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
         }
-        $error['wrong'] = 'Логин или пароль неправильный';
-        $response = ['status' => false,
-            'errors' => $error
-        ];
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+
     }
 } else {
     require('views/index.php');

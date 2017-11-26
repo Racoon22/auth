@@ -13,7 +13,7 @@ $('#auth_btn').on("click", function (e) {
         dataType: "json"
     }).done(function (data) {
         if (data.status == true) {
-            window.location.replace("list.html");
+            window.location.replace("list.php");
         }
         console.log(data);
     });
@@ -41,11 +41,7 @@ $('#reg_btn').on("click", function (e) {
         // }
         formData.append('photos', file, file.name);
     }
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'handler.php', true);
-    // Set up a handler for when the request finishes.
-    xhr.onload = function () {
-        if (xhr.status === 200) {
+
             $.post({
                 url: 'reg.php',
                 data: {
@@ -60,15 +56,25 @@ $('#reg_btn').on("click", function (e) {
                 dataType: "json"
             }).done(function (data) {
                 if (data.status === true) {
-                    window.location.href = "list.php";
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'handler.php', true);
+                    // Send the Data.
+                    xhr.send(formData);
+                    xhr.responseType = 'json';
+// Set up a handler for when the request finishes.
+                    xhr.onload = function () {
+                        if (xhr.response.status === true) {
+                            window.location.href = "list.php";
+                        } else {
+                            console.log(xhr.response);
+                        }
+                    }
                 }
-                console.log(data);
             });
             // File(s) uploaded.
-        } else {
-            alert('An error occurred!');
-        }
-    };
-    // Send the Data.
-    xhr.send(formData);
+
+
 });
+
+
+

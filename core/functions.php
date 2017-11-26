@@ -39,9 +39,6 @@ function reg_validation()
     if ($data['password'] !== $data['confirm_password']) {
         $error['error']['confirm'] = 'Пароль не совпадает';
     };
-    if (!isset($_SESSION['photo'])) {
-        $error['error']['photo'] = 'Загрузите фото';
-    }
 
     if (isset($error)) {
         return $error;

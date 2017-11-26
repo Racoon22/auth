@@ -2,9 +2,9 @@
 require('core/db.php');
 require("core/functions.php");
 
-if (isset($_COOKIE['login'])) {
-    header('location: list.php');
-}
+//if (isset($_COOKIE['login'])) {
+//    header('location: list.php');
+//}
 session_start();
 
 if (isset($_POST['login'])) {
@@ -25,30 +25,39 @@ if (isset($_POST['login'])) {
         $user->execute([
             'login' => $data['login'],
         ]);
-        $userID = $user->fetch();
-        if (empty($userID)) {
+        $login = $user->fetch();
+        if (empty($login)) {
+            $passoword = password_hash($data['password'], PASSWORD_DEFAULT);
             $user = $DBH->prepare(
-                "INSERT INTO users (name, age, description, login, password, photo)  VALUES (:nick, :age, :description,  :password, :login, :photo);
+                "INSERT INTO users (name, age, description, login, password)  VALUES (:nick, :age, :description,  :login, :password);
 ");
-            if (!$user->execute([
+            if ($user->execute([
                 'nick' => $data['name'],
                 'age' => $data['age'],
                 'login' => $data['login'],
-                'password' => $data['password'],
+                'password' => $passoword,
                 'description' => $data['description'],
-                'photo' => $_SESSION['photo']
             ])) {
+                $lastId = $DBH->lastInsertId();
+                $id = isset($lastId) ? $lastId : 0;
+                $_SESSION['id'] = $id;
+                setcookie('login', $data['login'], time() + (86400 * 30));
+                $response = [
+                    'status' => true,
+                ];
+            } else {
                 $error['wrong'] = 'Логин или пароль неправильный';
                 $response = ['status' => false,
                     'errors' => $error
                 ];
-                unlink($_SESSION['photo']);
-                echo json_encode($response, JSON_UNESCAPED_UNICODE);
             }
         }
-        setcookie('login', $data['login'], time() + (86400 * 30), "/");
-        $response = ['status' => true,
-        ];
+        else {
+            $error['exist'] = 'Пользователь с таким логином уже зарегистрирован';
+            $response = ['status' => false,
+                'errors' => $error
+            ];
+        }
         echo json_encode($response, JSON_UNESCAPED_UNICODE);
     }
 } else {

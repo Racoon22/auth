@@ -1,6 +1,7 @@
 <?php
 require('core/db.php');
 require("core/functions.php");
+session_start();
 
 if (isset($_FILES['photos'])) {
     $file = $_FILES['photos'];
@@ -9,17 +10,18 @@ if (isset($_FILES['photos'])) {
     if (!in_array($ext, $img_ext)) {
         $data['error']['photo'] = 'Фаил не картинка';
     } else {
-        $user = $DBH->query(
-            "SELECT id FROM users ORDER BY id DESC LIMIT 1;
-");
-        $userID = $user->fetch();
-        $newName = $userID['id'].'.' .$ext;
+        $newName = $_SESSION['id']. '.' . $ext;
         $path = "public/uploads/$newName";
-        if(!move_uploaded_file($file['tmp_name'], $path)){
+        if (!move_uploaded_file($file['tmp_name'], $path)) {
             $data['error']['photo'] = 'Неудалось загрузить файл';
         } else {
-            session_start();
-            $_SESSION['photo'] = $newName;
+            $file = $DBH->prepare(
+                "UPDATE users SET photo = :photo WHERE id = :id"
+            );
+            $file->execute([
+                'id' => $_SESSION['id'],
+                'photo' => $newName,
+            ]);
         }
     }
     if (isset($data['error'])) {
@@ -28,6 +30,7 @@ if (isset($_FILES['photos'])) {
         ];
     } else {
         $response = ['status' => true,
+            'photo' => $newName
         ];
     }
     echo json_encode($response, JSON_UNESCAPED_UNICODE);
