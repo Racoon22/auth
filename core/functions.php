@@ -21,9 +21,12 @@ function reg_validation()
     if (empty($data['name'])) {
         $error['error']['name'] = 'Введите имя';
     };
+    if (!empty($data['age']) && !is_int($data['age'])) {
+        $error['error']['age'] = 'Возраст должен быть числом';
+    }
     if (empty($data['age'])) {
         $error['error']['age'] = 'Введите возраст';
-    };
+    }
     if (empty($data['description'])) {
         $data['description'] = '';
     };

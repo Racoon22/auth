@@ -25,6 +25,12 @@ if (isset($_FILES['photos'])) {
         }
     }
     if (isset($data['error'])) {
+        $file = $DBH->prepare(
+            "DELETE FROM users WHERE id = :id"
+        );
+        $file->execute([
+            'id' => $_SESSION['id'],
+        ]);
         $response = ['status' => false,
             'errors' => $data['error']
         ];

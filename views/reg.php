@@ -23,6 +23,12 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 control-label">Фото</label>
+                <div class="col-sm-9">
+                    <input name="photo" type="file" class="form-control" id="photo">
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="login" class="col-sm-3 control-label">Логин</label>
                 <div class="col-sm-9">
                     <input name="login" type="text" class="form-control" id="login" placeholder="Логин">
@@ -32,12 +38,6 @@
                 <label for="password" class="col-sm-3 control-label">Пароль</label>
                 <div class="col-sm-9">
                     <input name="password" type="password" class="form-control" id="password" placeholder="Пароль">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Фото</label>
-                <div class="col-sm-9">
-                    <input name="photo" type="file" class="form-control" id="photo">
                 </div>
             </div>
             <div class="form-group">
